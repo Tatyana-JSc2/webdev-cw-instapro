@@ -8,7 +8,7 @@ import {
   POSTS_PAGE,
   USER_POSTS_PAGE,
 } from "./routes.js";
-import { renderPostsPageComponent } from "./components/posts-page-component.js";
+import { renderPostsPageComponent, UserId } from "./components/posts-page-component.js";
 import { renderLoadingPageComponent } from "./components/loading-page-component.js";
 import {
   getUserFromLocalStorage,
@@ -24,6 +24,8 @@ const getToken = () => {
   const token = user ? `Bearer ${user.token}` : undefined;
   return token;
 };
+
+
 
 export const logout = () => {
   user = null;
@@ -66,12 +68,20 @@ export const goToPage = (newPage, data) => {
         });
     }
 
+
     if (newPage === USER_POSTS_PAGE) {
-      // TODO: реализовать получение постов юзера из API
-      console.log("Открываю страницу пользователя: ", data.userId);
-      page = USER_POSTS_PAGE;
-      posts = [];
-      return renderApp();
+      // свой код ->
+      page = LOADING_PAGE;
+      renderApp();
+      return getPosts({ token: getToken() })
+        .then(() => {
+          const UserPosts = posts.filter(post => post.user.id === UserId);
+          console.log("Открываю страницу пользователя: ", data.userId);
+          page = USER_POSTS_PAGE;
+          posts = UserPosts;
+          return renderApp();
+        })
+      // <- свой код
     }
 
     page = newPage;
@@ -124,9 +134,12 @@ const renderApp = () => {
   }
 
   if (page === USER_POSTS_PAGE) {
-    // TODO: реализовать страницу фотографию пользвателя
-    appEl.innerHTML = "Здесь будет страница фотографий пользователя";
-    return;
+    // свой код ->
+    return renderPostsPageComponent({
+      appEl,
+    });
+    // <- свой код
+
   }
 };
 
