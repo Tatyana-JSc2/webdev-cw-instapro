@@ -1,11 +1,12 @@
 import { getPosts, AddPostClick } from "../api.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { renderUploadImageComponent } from "./upload-image-component.js";
-import { getToken } from "../index.js";
+import { getToken, goToPage } from "../index.js";
+import {POSTS_PAGE} from "../routes.js";
 
 
 
-export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
+export function renderAddPostPageComponent({ appEl/*, AddPostClick */}) {
   let imageUrl = "";
   const render = () => {
     // TODO: Реализовать страницу добавления поста
@@ -47,16 +48,23 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
       });
     }
 
-    const text = document.getElementById("text-input").value;
+
+    const Text = document.getElementById("text-input");
+    //const text = document.getElementById("text-input").value;
 
     document.getElementById("add-button").addEventListener("click", () => {
-      return AddPostClick({
+      // TODO: реализовать добавление поста в API
+    // свой код ->
+       AddPostClick({
         token: getToken(),
-        description: text,
+        description: Text.value.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
         imageUrl: imageUrl,
       }).then(() => {
-        return getPosts();
+        goToPage(POSTS_PAGE);
+      }).catch((error) => {
+        console.warn(error);
       });
+       // <- свой код
     });
   };
 
@@ -65,17 +73,5 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
 
   render();
 }
-//document.getElementById("add-button").addEventListener("click", () => {
-//onAddPostClick({
-// description: "Описание картинки",
-// imageUrl: "https://image.png",
-//});
-//});
 
-/*onAddPostClick({
-  description: text,
-  imageUrl: imageUrl,
-}).catch((error) => {
-  console.warn(error);
-  //setError(error.message);
-});*/
+

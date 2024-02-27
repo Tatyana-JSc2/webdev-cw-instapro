@@ -3,7 +3,8 @@
 
 // Замени на свой, чтобы получить независимый от других набор данных.
 // "боевая" версия инстапро лежит в ключе prod
-const personalKey = "prod";
+const personalKey = "tanya";
+//const personalKey = "prod";
 const baseHost = "https://webdev-hw-api.vercel.app";
 const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`;
 
@@ -26,7 +27,10 @@ export function getPosts({ token }) {
     });
 }
 
-export function AddPostClick({token, description, imageUrl }) {
+
+// TODO: реализовать добавление поста в API
+// свой код ->
+export function AddPostClick({ token, description, imageUrl }) {
   return fetch(postsHost, {
     method: "POST",
     headers: {
@@ -45,7 +49,7 @@ export function AddPostClick({token, description, imageUrl }) {
     })
     ;
 }
-
+// <- свой код
 
 
 
