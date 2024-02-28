@@ -1,11 +1,20 @@
-import { USER_POSTS_PAGE } from "../routes.js";
+import { USER_POSTS_PAGE, POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
-import { posts, goToPage } from "../index.js";
+import { posts, goToPage, getToken } from "../index.js";
+import { likeClick, DeletelikeClick } from "../api.js";
+
+
 
 export let UserId;
 export function setUserId(newUserId) {
   UserId = newUserId;
 };
+
+export let IsLiked;
+export function setIsLiked(newIsLiked) {
+  IsLiked = newIsLiked;
+};
+
 
 
 export function renderPostsPageComponent({ appEl }) {
@@ -44,10 +53,10 @@ export function renderPostsPageComponent({ appEl }) {
           </div>
           <div class="post-likes">
             <button data-post-id="${post.id}" class="like-button">
-              <img src="./assets/images/like-active.svg">
+            <img src="${post.isLiked === true ? "./assets/images/like-active.svg" : "./assets/images/like-not-active.svg"}">
             </button>
             <p class="post-likes-text">
-              Нравится: <strong>2</strong>
+              Нравится: <strong>${post.likes.length}</strong>
             </p>
           </div>
           <p class="post-text">
@@ -83,4 +92,36 @@ export function renderPostsPageComponent({ appEl }) {
 
     });
   }
+
+  //добавление обработчика (кнопка лайков)
+
+
+  for (let likeButtonElement of document.querySelectorAll(".like-button")) {
+
+    likeButtonElement.addEventListener('click', () => {
+      setIsLiked(likeButtonElement.dataset.isLiked);
+      if (IsLiked === false) {
+        likeClick({
+          token: getToken(),
+          PostId: likeButtonElement.dataset.postId,
+        }).then(() => {
+          goToPage(POSTS_PAGE);
+
+        }).catch((error) => {
+          console.warn(error);
+        });
+      } else {
+        DeletelikeClick({
+          token: getToken(),
+          PostId: likeButtonElement.dataset.postId,
+        }).then(() => {
+          goToPage(POSTS_PAGE);
+
+        }).catch((error) => {
+          console.warn(error);
+        });
+      };
+    });
+  };
+
 }
