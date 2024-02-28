@@ -12,31 +12,28 @@ export function renderAuthPageComponent({ appEl, setUser }) {
           <div class="header-container"></div>
           <div class="form">
               <h3 class="form-title">
-                ${
-                  isLoginMode
-                    ? "Вход в&nbsp;Instapro"
-                    : "Регистрация в&nbsp;Instapro"
-                }
+                ${isLoginMode
+        ? "Вход в&nbsp;Instapro"
+        : "Регистрация в&nbsp;Instapro"
+      }
                 </h3>
               <div class="form-inputs">
     
-                  ${
-                    !isLoginMode
-                      ? `
+                  ${!isLoginMode
+        ? `
                       <div class="upload-image-container"></div>
                       <input type="text" id="name-input" class="input" placeholder="Имя" />
                       `
-                      : ""
-                  }
+        : ""
+      }
                   
                   <input type="text" id="login-input" class="input" placeholder="Логин" />
                   <input type="password" id="password-input" class="input" placeholder="Пароль" />
                   
                   <div class="form-error"></div>
                   
-                  <button class="button" id="login-button">${
-                    isLoginMode ? "Войти" : "Зарегистрироваться"
-                  }</button>
+                  <button class="button" id="login-button">${isLoginMode ? "Войти" : "Зарегистрироваться"
+      }</button>
               </div>
             
               <div class="form-footer">
@@ -92,17 +89,18 @@ export function renderAuthPageComponent({ appEl, setUser }) {
           return;
         }
 
-        loginUser({
-          login: login,
-          password: password,
-        })
-          .then((user) => {
-            setUser(user.user);
+        commentInputElement.value.replace(originalComment, '').replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
+          loginUser({
+            login: login.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
+            password: password.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
           })
-          .catch((error) => {
-            console.warn(error);
-            setError(error.message);
-          });
+            .then((user) => {
+              setUser(user.user);
+            })
+            .catch((error) => {
+              console.warn(error);
+              setError(error.message);
+            });
       } else {
         const login = document.getElementById("login-input").value;
         const name = document.getElementById("name-input").value;
@@ -127,9 +125,9 @@ export function renderAuthPageComponent({ appEl, setUser }) {
         }
 
         registerUser({
-          login: login,
-          password: password,
-          name: name,
+          login: login.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
+          password: password.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
+          name: name.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
           imageUrl,
         })
           .then((user) => {

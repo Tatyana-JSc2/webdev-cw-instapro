@@ -16,6 +16,13 @@ export function setIsLiked(newIsLiked) {
 };
 
 
+//function DistanceToNow() {
+//  let NowTime = new Date();
+//  let lastTime = new Date (`${post.createdAt}`);
+//  let resultTime = NowTime.getTime() - lastTime.getTime()
+// formatDistanceToNow(new Date(resultTime));
+//} 
+
 
 export function renderPostsPageComponent({ appEl }) {
   // TODO: реализовать рендер постов из api
@@ -29,14 +36,22 @@ export function renderPostsPageComponent({ appEl }) {
 
 
 
-  /*function DistanceToNow() {
-    formatDistanceToNow(new Date ());
-  } 
-  //post.createdAt
-   
-  const result = formatDistanceToNow(
-    new Date(post.createdAt)
-  )*/
+
+  //post.createdAt*/
+  //const result = formatDistanceToNow(
+  //  new Date(`${post.createdAt}`)
+  //);
+
+
+  //function Time() {
+  //let NowTime = new Date();
+  //let lastTime = new Date (`${post.createdAt}`);
+  //let resultTime = NowTime.getTime() - lastTime.getTime()
+
+
+  //date: myDate.getDate() + ":" + (myDate.getMonth() + 1) +
+  //      ":" + myDate.getFullYear() + " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds(),
+
 
 
 
@@ -52,7 +67,7 @@ export function renderPostsPageComponent({ appEl }) {
             <img class="post-image" src="${post.imageUrl}">
           </div>
           <div class="post-likes">
-            <button data-post-id="${post.id}" class="like-button">
+            <button data-post-id="${post.id}" class="${post.isLiked === true ? "delete-Like-button" : "like-button"}">
             <img src="${post.isLiked === true ? "./assets/images/like-active.svg" : "./assets/images/like-not-active.svg"}">
             </button>
             <p class="post-likes-text">
@@ -65,7 +80,7 @@ export function renderPostsPageComponent({ appEl }) {
             ${post.description}
           </p>
           <p class="post-date">
-          ${post.createdAt}
+          ${new Date(`${post.createdAt}`).toLocaleString()}
           </p>
         </li>`
   }).join('');
@@ -93,34 +108,36 @@ export function renderPostsPageComponent({ appEl }) {
     });
   }
 
-  //добавление обработчика (кнопка лайков)
 
+  //кнопка лайков
 
   for (let likeButtonElement of document.querySelectorAll(".like-button")) {
 
     likeButtonElement.addEventListener('click', () => {
-      setIsLiked(likeButtonElement.dataset.isLiked);
-      if (IsLiked === false) {
-        likeClick({
-          token: getToken(),
-          PostId: likeButtonElement.dataset.postId,
-        }).then(() => {
-          goToPage(POSTS_PAGE);
+      likeClick({
+        token: getToken(),
+        PostId: likeButtonElement.dataset.postId,
+      }).then(() => {
+        goToPage(POSTS_PAGE);
+      }).catch((error) => {
+        console.warn(error);
+      });
 
-        }).catch((error) => {
-          console.warn(error);
-        });
-      } else {
-        DeletelikeClick({
-          token: getToken(),
-          PostId: likeButtonElement.dataset.postId,
-        }).then(() => {
-          goToPage(POSTS_PAGE);
+    });
+  };
 
-        }).catch((error) => {
-          console.warn(error);
-        });
-      };
+
+  for (let likeButtonElement of document.querySelectorAll(".delete-Like-button")) {
+
+    likeButtonElement.addEventListener('click', () => {
+      DeletelikeClick({
+        token: getToken(),
+        PostId: likeButtonElement.dataset.postId,
+      }).then(() => {
+        goToPage(POSTS_PAGE);
+      }).catch((error) => {
+        console.warn(error);
+      });
     });
   };
 
