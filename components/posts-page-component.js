@@ -55,9 +55,9 @@ export function renderPostsPageComponent({ appEl }) {
   //${formatDistanceToNow(new Date(`${post.createdAt}`).toLocaleString())}
   //date-fns.formatDistanceToNow
   // ${new Date(`${post.createdAt}`).toLocaleString()}
-  const currentDate = new Date();
-  const createDate = new Date('1995-12-17T03:24:00'); // тут дата создания
-  formatDistance(createDate, currentDate);
+  //const currentDate = new Date();
+  //const createDate = new Date('1995-12-17T03:24:00'); // тут дата создания
+  //formatDistance(createDate, currentDate);
 
   // свой код ->
   const postsHtml = posts.map((post, index) => {
@@ -84,7 +84,7 @@ export function renderPostsPageComponent({ appEl }) {
             ${post.description}
           </p>
           <p class="post-date">
-          ${formatDistance(new Date(`${post.createdAt}`), new Date())}
+          ${new Date(`${post.createdAt}`).toLocaleString()}
           </p>
         </li>`
   }).join('');
