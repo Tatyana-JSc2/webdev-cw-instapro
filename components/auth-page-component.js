@@ -89,18 +89,18 @@ export function renderAuthPageComponent({ appEl, setUser }) {
           return;
         }
 
-        commentInputElement.value.replace(originalComment, '').replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
-          loginUser({
-            login: login.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
-            password: password.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
+
+        loginUser({
+          login: login.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
+          password: password.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
+        })
+          .then((user) => {
+            setUser(user.user);
           })
-            .then((user) => {
-              setUser(user.user);
-            })
-            .catch((error) => {
-              console.warn(error);
-              setError(error.message);
-            });
+          .catch((error) => {
+            console.warn(error);
+            setError(error.message);
+          });
       } else {
         const login = document.getElementById("login-input").value;
         const name = document.getElementById("name-input").value;

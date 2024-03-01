@@ -52,8 +52,12 @@ export function renderPostsPageComponent({ appEl }) {
   //date: myDate.getDate() + ":" + (myDate.getMonth() + 1) +
   //      ":" + myDate.getFullYear() + " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds(),
 
-
-
+  //${formatDistanceToNow(new Date(`${post.createdAt}`).toLocaleString())}
+  //date-fns.formatDistanceToNow
+  // ${new Date(`${post.createdAt}`).toLocaleString()}
+  const currentDate = new Date();
+  const createDate = new Date('1995-12-17T03:24:00'); // тут дата создания
+  formatDistance(createDate, currentDate);
 
   // свой код ->
   const postsHtml = posts.map((post, index) => {
@@ -80,7 +84,7 @@ export function renderPostsPageComponent({ appEl }) {
             ${post.description}
           </p>
           <p class="post-date">
-          ${new Date(`${post.createdAt}`).toLocaleString()}
+          ${formatDistance(new Date(`${post.createdAt}`), new Date())}
           </p>
         </li>`
   }).join('');
@@ -109,10 +113,11 @@ export function renderPostsPageComponent({ appEl }) {
   }
 
 
+
+  // свой код ->
   //кнопка лайков
 
   for (let likeButtonElement of document.querySelectorAll(".like-button")) {
-
     likeButtonElement.addEventListener('click', () => {
       likeClick({
         token: getToken(),
@@ -126,9 +131,7 @@ export function renderPostsPageComponent({ appEl }) {
     });
   };
 
-
   for (let likeButtonElement of document.querySelectorAll(".delete-Like-button")) {
-
     likeButtonElement.addEventListener('click', () => {
       DeletelikeClick({
         token: getToken(),
@@ -140,5 +143,5 @@ export function renderPostsPageComponent({ appEl }) {
       });
     });
   };
-
 }
+// <- свой код
