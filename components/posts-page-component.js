@@ -58,7 +58,29 @@ export function renderPostsPageComponent({ appEl }) {
   //const currentDate = new Date();
   //const createDate = new Date('1995-12-17T03:24:00'); // тут дата создания
   //formatDistance(createDate, currentDate);
+  // ${new Date(`${post.createdAt}`).toLocaleString()}
 
+  //function FormatTime(a) {
+  // let NowTime = new Date();
+  //let lastTime = new Date (a);
+  //let resultTime = NowTime.getTime() - lastTime.getTime();
+  //return new Date(resultTime);
+  //}
+  function likeNames(arr) {
+    //const arrLength = arr.length;
+    //const likeArr = arr.pop().toString;
+    //const likeArr = arr[arrLength - 1];
+    //let likeArr = arr.slice(arrLength - 1);
+    const likeArr = JSON.stringify(arr.pop());
+    //likeArr.__proto__.toString = function() {
+    //return this.name;
+    //}
+    return likeArr;
+    //return arr.pop();
+  }
+
+
+  //post.likes.name
   // свой код ->
   const postsHtml = posts.map((post, index) => {
     return `
@@ -75,7 +97,7 @@ export function renderPostsPageComponent({ appEl }) {
             <img src="${post.isLiked === true ? "./assets/images/like-active.svg" : "./assets/images/like-not-active.svg"}">
             </button>
             <p class="post-likes-text">
-              Нравится: <strong>${post.likes.length}</strong>
+              Нравится: <strong>${likeNames(post.likes) + " и еще " + post.likes.length}</strong>
             </p>
           </div>
           <p class="post-text">
