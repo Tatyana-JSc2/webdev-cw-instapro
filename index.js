@@ -43,9 +43,34 @@ export const logout = () => {
   goToPage(POSTS_PAGE);
 };
 
+
+
+export function mainPosts() {
+  return getPosts({ token: getToken() })
+    .then((newPosts) => {
+      if (page === USER_POSTS_PAGE) {
+        posts = UserPosts(newPosts);
+      } else {
+        posts = newPosts;
+      };
+      renderApp();
+    })
+    .catch((error) => {
+      console.error(error);
+      goToPage(LOADING_PAGE);
+    });
+};
+
+
+function UserPosts(posts) {
+  return posts.filter(post => post.user.id === UserId);
+}
+
 /**
  * Включает страницу приложения
  */
+
+
 export const goToPage = (newPage, data) => {
   if (
     [
@@ -62,20 +87,12 @@ export const goToPage = (newPage, data) => {
       return renderApp();
     }
 
+
     if (newPage === POSTS_PAGE) {
       page = LOADING_PAGE;
       renderApp();
-
-      return getPosts({ token: getToken() })
-        .then((newPosts) => {
-          page = POSTS_PAGE;
-          posts = newPosts;
-          renderApp();
-        })
-        .catch((error) => {
-          console.error(error);
-          goToPage(POSTS_PAGE);
-        });
+      //page = POSTS_PAGE;
+      mainPosts();
     }
 
 
@@ -85,21 +102,19 @@ export const goToPage = (newPage, data) => {
       page = LOADING_PAGE;
       renderApp();
       return getPosts({ token: getToken() })
-        .then(() => {
-          const UserPosts = posts.filter(post => post.user.id === UserId);
+        .then((newPosts) => {
+          //const UserPosts = posts.filter(post => post.user.id === UserId);
           console.log("Открываю страницу пользователя: ", data.userId);
+          posts = UserPosts(newPosts);
           page = USER_POSTS_PAGE;
-          posts = UserPosts;
-          return renderApp();
+          renderApp();
         }).catch((error) => {
           console.warn(error);
         });
       // <- свой код
     }
-
     page = newPage;
     renderApp();
-
     return;
   }
 

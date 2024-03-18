@@ -1,7 +1,9 @@
 import { USER_POSTS_PAGE, POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
-import { posts, goToPage, getToken, setPosts, renderApp, setPage } from "../index.js";
+import { posts, goToPage, getToken, setPosts, renderApp, setPage, mainPosts } from "../index.js";
 import { likeClick, DeletelikeClick, getPosts } from "../api.js";
+//import {formatDistanceToNow} from "date-fns";
+//import ru from "date-fns/locale/ru";
 
 
 
@@ -14,6 +16,7 @@ export let IsLiked;
 export function setIsLiked(newIsLiked) {
   IsLiked = newIsLiked;
 };
+
 
 
 //function DistanceToNow() {
@@ -72,6 +75,7 @@ export function renderPostsPageComponent({ appEl }) {
   //let resultTime = NowTime.getTime() - lastTime.getTime();
   //return new Date(resultTime);
   //}
+  //${new Date(`${post.createdAt}`).toLocaleString()}
 
   console.log("Актуальный список постов:", posts);
 
@@ -139,13 +143,15 @@ export function renderPostsPageComponent({ appEl }) {
         token: getToken(),
         PostId: likeButtonElement.dataset.postId,
       }).then(() => {
-        getPosts({ token: getToken() });
+        mainPosts();
+        // getPosts({ token: getToken() });
+        //})
+        //.then((newPosts) => {
+
+        //setPosts(newPosts);
+        //setPage(POSTS_PAGE);
+        //renderApp();
       })
-        .then((newPosts) => {
-          setPosts(newPosts);
-          setPage(POSTS_PAGE);
-          renderApp();
-        })
         .catch((error) => {
           console.warn(error);
           //goToPage(POSTS_PAGE);
@@ -159,7 +165,8 @@ export function renderPostsPageComponent({ appEl }) {
         token: getToken(),
         PostId: likeButtonElement.dataset.postId,
       }).then(() => {
-        goToPage(POSTS_PAGE);
+        mainPosts();
+        //goToPage(POSTS_PAGE);
       }).catch((error) => {
         console.warn(error);
       });
