@@ -1,7 +1,7 @@
 import { USER_POSTS_PAGE, POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
-import { posts, goToPage, getToken } from "../index.js";
-import { likeClick, DeletelikeClick } from "../api.js";
+import { posts, goToPage, getToken, setPosts, renderApp, setPage } from "../index.js";
+import { likeClick, DeletelikeClick, getPosts } from "../api.js";
 
 
 
@@ -26,7 +26,7 @@ export function setIsLiked(newIsLiked) {
 
 export function renderPostsPageComponent({ appEl }) {
   // TODO: реализовать рендер постов из api
-  console.log("Актуальный список постов:", posts);
+
 
 
   /**
@@ -52,6 +52,12 @@ export function renderPostsPageComponent({ appEl }) {
   //date: myDate.getDate() + ":" + (myDate.getMonth() + 1) +
   //      ":" + myDate.getFullYear() + " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds(),
 
+
+  //import {formatDistanceToNow} from "date-fns";
+  //import ru from "date-fns/locale/ru";
+  //${formatDistanceToNow(new Date(post.createdAt),{
+  //locale: ru,
+  // })}
   //${formatDistanceToNow(new Date(`${post.createdAt}`).toLocaleString())}
   //date-fns.formatDistanceToNow
   // ${new Date(`${post.createdAt}`).toLocaleString()}
@@ -67,7 +73,7 @@ export function renderPostsPageComponent({ appEl }) {
   //return new Date(resultTime);
   //}
 
-
+  console.log("Актуальный список постов:", posts);
 
   // свой код ->
   const postsHtml = posts.map((post, index) => {
@@ -133,11 +139,17 @@ export function renderPostsPageComponent({ appEl }) {
         token: getToken(),
         PostId: likeButtonElement.dataset.postId,
       }).then(() => {
-        goToPage(POSTS_PAGE);
-      }).catch((error) => {
-        console.warn(error);
-      });
-
+        getPosts({ token: getToken() });
+      })
+        .then((newPosts) => {
+          setPosts(newPosts);
+          setPage(POSTS_PAGE);
+          renderApp();
+        })
+        .catch((error) => {
+          console.warn(error);
+          //goToPage(POSTS_PAGE);
+        });
     });
   };
 

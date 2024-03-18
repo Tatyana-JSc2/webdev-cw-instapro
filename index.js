@@ -20,6 +20,16 @@ export let user = getUserFromLocalStorage();
 export let page = null;
 export let posts = [];
 
+
+export function setPosts(newPosts) {
+  posts = newPosts;
+}
+
+export function setPage(newPage) {
+  page = newPage;
+}
+
+
 export const getToken = () => {
   const token = user ? `Bearer ${user.token}` : undefined;
   return token;
@@ -96,7 +106,7 @@ export const goToPage = (newPage, data) => {
   throw new Error("страницы не существует");
 };
 
-const renderApp = () => {
+export const renderApp = () => {
   const appEl = document.getElementById("app");
   if (page === LOADING_PAGE) {
     return renderLoadingPageComponent({
