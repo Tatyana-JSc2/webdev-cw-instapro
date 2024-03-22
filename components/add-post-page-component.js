@@ -1,4 +1,4 @@
-import { getPosts, AddPostClick } from "../api.js";
+import { AddPostClick } from "../api.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { renderUploadImageComponent } from "./upload-image-component.js";
 import { getToken, goToPage } from "../index.js";

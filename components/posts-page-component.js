@@ -1,9 +1,9 @@
-import { USER_POSTS_PAGE, POSTS_PAGE } from "../routes.js";
+import { USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
-import { posts, goToPage, getToken, setPosts, renderApp, setPage, mainPosts } from "../index.js";
-import { likeClick, DeletelikeClick, getPosts } from "../api.js";
-//import {formatDistanceToNow} from "date-fns";
-//import ru from "date-fns/locale/ru";
+import { posts, goToPage, getToken, mainPosts } from "../index.js";
+import { likeClick, DeletelikeClick } from "../api.js";
+import { formatDistanceToNow } from "date-fns";
+import ru from "date-fns/locale/ru";
 
 
 
@@ -19,17 +19,8 @@ export function setIsLiked(newIsLiked) {
 
 
 
-//function DistanceToNow() {
-//  let NowTime = new Date();
-//  let lastTime = new Date (`${post.createdAt}`);
-//  let resultTime = NowTime.getTime() - lastTime.getTime()
-// formatDistanceToNow(new Date(resultTime));
-//} 
-
-
 export function renderPostsPageComponent({ appEl }) {
   // TODO: реализовать рендер постов из api
-
 
 
   /**
@@ -38,43 +29,6 @@ export function renderPostsPageComponent({ appEl }) {
    */
 
 
-
-
-  //post.createdAt*/
-  //const result = formatDistanceToNow(
-  //  new Date(`${post.createdAt}`)
-  //);
-
-
-  //function Time() {
-  //let NowTime = new Date();
-  //let lastTime = new Date (`${post.createdAt}`);
-  //let resultTime = NowTime.getTime() - lastTime.getTime()
-
-
-  //date: myDate.getDate() + ":" + (myDate.getMonth() + 1) +
-  //      ":" + myDate.getFullYear() + " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds(),
-
-
-  //import {formatDistanceToNow} from "date-fns";
-  //import ru from "date-fns/locale/ru";
-  //${formatDistanceToNow(new Date(post.createdAt),{
-  //locale: ru,
-  // })}
-  //${formatDistanceToNow(new Date(`${post.createdAt}`).toLocaleString())}
-  //date-fns.formatDistanceToNow
-  // ${new Date(`${post.createdAt}`).toLocaleString()}
-  //const currentDate = new Date();
-  //const createDate = new Date('1995-12-17T03:24:00'); // тут дата создания
-  //formatDistance(createDate, currentDate);
-  // ${new Date(`${post.createdAt}`).toLocaleString()}
-
-  //function FormatTime(a) {
-  // let NowTime = new Date();
-  //let lastTime = new Date (a);
-  //let resultTime = NowTime.getTime() - lastTime.getTime();
-  //return new Date(resultTime);
-  //}
   //${new Date(`${post.createdAt}`).toLocaleString()}
 
   console.log("Актуальный список постов:", posts);
@@ -95,7 +49,7 @@ export function renderPostsPageComponent({ appEl }) {
             <img src="${post.isLiked === true ? "./assets/images/like-active.svg" : "./assets/images/like-not-active.svg"}">
             </button>
             <p class="post-likes-text">
-              Нравится: <strong>${post.likes.length === 0 ? " пока никто не лайкнул..." : post.likes[post.likes.length - 1]?.name + "  и еще  " + post.likes.length} </strong>
+              Нравится: <strong>${post.likes.length === 0 ? " пока никто не лайкнул..." : post.likes.length === 1 ? post.likes[post.likes.length - 1]?.name : post.likes[post.likes.length - 1]?.name + "  и еще  " + (post.likes.length - 1)} </strong>
             </p>
           </div>
           <p class="post-text">
@@ -104,7 +58,9 @@ export function renderPostsPageComponent({ appEl }) {
             ${post.description}
           </p>
           <p class="post-date">
-          ${new Date(`${post.createdAt}`).toLocaleString()}
+          ${formatDistanceToNow(new Date(post.createdAt), {
+      locale: ru,
+    })}
           </p>
         </li>`
   }).join('');
@@ -146,13 +102,6 @@ export function renderPostsPageComponent({ appEl }) {
       }).then(() => {
         mainPosts();
         likeButtonElement.classList.remove("loading-like");
-        // getPosts({ token: getToken() });
-        //})
-        //.then((newPosts) => {
-
-        //setPosts(newPosts);
-        //setPage(POSTS_PAGE);
-        //renderApp();
       })
         .catch((error) => {
           console.warn(error);
@@ -170,7 +119,7 @@ export function renderPostsPageComponent({ appEl }) {
       }).then(() => {
         mainPosts();
         likeButtonElement.classList.remove("loading-like");
-        //goToPage(POSTS_PAGE);
+
       }).catch((error) => {
         console.warn(error);
       });
