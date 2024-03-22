@@ -139,11 +139,13 @@ export function renderPostsPageComponent({ appEl }) {
 
   for (let likeButtonElement of document.querySelectorAll(".like-button")) {
     likeButtonElement.addEventListener('click', () => {
+      likeButtonElement.classList.add("loading-like");
       likeClick({
         token: getToken(),
         PostId: likeButtonElement.dataset.postId,
       }).then(() => {
         mainPosts();
+        likeButtonElement.classList.remove("loading-like");
         // getPosts({ token: getToken() });
         //})
         //.then((newPosts) => {
@@ -161,11 +163,13 @@ export function renderPostsPageComponent({ appEl }) {
 
   for (let likeButtonElement of document.querySelectorAll(".delete-Like-button")) {
     likeButtonElement.addEventListener('click', () => {
+      likeButtonElement.classList.add("loading-like");
       DeletelikeClick({
         token: getToken(),
         PostId: likeButtonElement.dataset.postId,
       }).then(() => {
         mainPosts();
+        likeButtonElement.classList.remove("loading-like");
         //goToPage(POSTS_PAGE);
       }).catch((error) => {
         console.warn(error);
