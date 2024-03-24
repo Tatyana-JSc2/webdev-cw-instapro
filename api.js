@@ -1,8 +1,12 @@
+import { UserId } from "./components/posts-page-component.js";
+
 // Замени на свой, чтобы получить независимый от других набор данных.
 // "боевая" версия инстапро лежит в ключе prod
-const personalKey = "prod";
+const personalKey = "tanya";
+//const personalKey = "prod";
 const baseHost = "https://webdev-hw-api.vercel.app";
 const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`;
+
 
 export function getPosts({ token }) {
   return fetch(postsHost, {
@@ -23,6 +27,73 @@ export function getPosts({ token }) {
     });
 }
 
+
+// TODO: реализовать добавление поста в API
+// свой код ->
+export function AddPostClick({ token, description, imageUrl }) {
+  return fetch(postsHost, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+    body: JSON.stringify({
+      description,
+      imageUrl,
+    }),
+  })
+    .then((response) => {
+      if (response.status === 401) {
+        throw new Error("Нет авторизации");
+      }
+      return response.json();
+    })
+    ;
+}
+// <- свой код
+
+
+
+// свой код ->
+//поставить лайк
+export function likeClick({ token, PostId }) {
+  return fetch(postsHost + `/${PostId}/like`, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+   
+  })
+    .then((response) => {
+      if (response.status === 401) {
+        throw new Error("Нет авторизации");
+      }
+      return response.json();
+    })
+    ;
+}
+
+//убрать лайк
+export function DeletelikeClick({ token, PostId }) {
+  return fetch(postsHost + `/${PostId}/dislike`, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+   
+  })
+    .then((response) => {
+      if (response.status === 401) {
+        throw new Error("Нет авторизации");
+      }
+      return response.json();
+    })
+    ;
+}
+// <- свой код
+
+
+
+
 // https://github.com/GlebkaF/webdev-hw-api/blob/main/pages/api/user/README.md#%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D1%8C%D1%81%D1%8F
 export function registerUser({ login, password, name, imageUrl }) {
   return fetch(baseHost + "/api/user", {
@@ -40,6 +111,7 @@ export function registerUser({ login, password, name, imageUrl }) {
     return response.json();
   });
 }
+
 
 export function loginUser({ login, password }) {
   return fetch(baseHost + "/api/user/login", {
